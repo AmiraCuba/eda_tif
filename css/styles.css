@@ -379,6 +379,120 @@ body {
 }
 
 /* ==========================================================================
+   VISUALIZADOR DE LA COLA (Pasillo / Tubo horizontal FIFO)
+   ========================================================================== */
+.cola-visual {
+    width: 100%;
+    min-height: 160px;
+    border-top: 3px solid var(--text-main);
+    border-bottom: 3px solid var(--text-main);
+    border-radius: 0;
+    padding: 20px 12px;
+    background-color: #faf6f2;
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.cola-visual::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--text-main);
+}
+
+.cola-visual::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--text-main);
+}
+
+/* Mensaje de cola vacía */
+.cola-vacia-msg {
+    color: var(--text-muted);
+    font-family: 'Inter', system-ui, sans-serif;
+    text-align: center;
+    position: absolute;
+    top: 45%;
+    left: 0;
+    right: 0;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* ELEMENTOS DE LA COLA */
+.nodo-cola {
+    background: #ffffff;
+    color: var(--text-main);
+    text-align: center;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: 1.5px solid var(--border-color);
+    box-shadow: 0 6px 15px rgba(62, 39, 35, 0.04);
+    animation: pushBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    text-transform: none !important;
+}
+
+/* El FRENTE de la cola (primer elemento, el que será atendido) */
+.nodo-cola:first-child {
+    background: linear-gradient(135deg, #d4e5d9, #b8d4be);
+    color: var(--text-main);
+    border: 1.5px solid #8da99b;
+    box-shadow: 0 10px 25px rgba(141, 169, 155, 0.35);
+}
+
+/* Subtítulo del frente */
+.nodo-cola:first-child::after {
+    content: "Frente de la cola";
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    display: block;
+    color: #5a8270;
+    font-weight: 600;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    text-transform: none;
+}
+
+/* Último elemento (el final de la cola, donde se encola) */
+.nodo-cola:last-child::after {
+    content: "Final de la cola";
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.7rem;
+    display: block;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    text-transform: none;
+}
+
+/* Si hay solo un elemento, gana el estilo de frente */
+.nodo-cola:first-child:last-child::after {
+    content: "Frente de la cola";
+}
+
+/* ==========================================================================
    ANIMACIONES
    ========================================================================== */
 @keyframes pushBounce {

@@ -5,8 +5,8 @@
 // Creamos la pila con un límite máximo de 5 elementos para que luzca perfecta en el CSS
 const miPila = new Pila(5);
 
-// Aquí tus compañeros instanciarán sus clases cuando las tengan listas, por ejemplo:
-// const miCola = new Cola();
+// Instanciamos la Cola con un límite máximo de 5 elementos
+const miCola = new Cola(5);
 // const miLista = new Lista();
 
 
@@ -155,7 +155,119 @@ renderizarPila();
 
 
 // ==========================================================================
+// CONTROLADOR VISUAL DE LA COLA
+// ==========================================================================
+
+// Captura de elementos del HTML
+const colaInput = document.getElementById('cola-input');
+const btnColaEnqueue = document.getElementById('btn-cola-enqueue');
+const btnColaDequeue = document.getElementById('btn-cola-dequeue');
+const btnColaPeek = document.getElementById('btn-cola-peek');
+const btnColaClear = document.getElementById('btn-cola-clear');
+const colaVisualizador = document.getElementById('cola-visualizador');
+const colaStatusText = document.getElementById('cola-status');
+const colaPeekVal = document.getElementById('cola-peek-val');
+
+/**
+ * Función que lee los datos actuales de 'miCola' y los dibuja en el HTML
+ */
+function renderizarCola() {
+    colaVisualizador.innerHTML = '';
+
+    if (miCola.isEmpty()) {
+        colaVisualizador.innerHTML = '<div class="cola-vacia-msg">La cola está vacía. ¡Agrega un elemento!</div>';
+        colaStatusText.textContent = "Vacía";
+        colaStatusText.style.color = "var(--color-danger)";
+        colaPeekVal.textContent = "-";
+        return;
+    }
+
+    colaStatusText.textContent = `Activa (${miCola.size()} elementos)`;
+    colaStatusText.style.color = "var(--color-success)";
+    colaPeekVal.textContent = miCola.peek();
+
+    const elementos = miCola.getElements();
+
+    // Los dibujamos en orden FIFO: el frente (índice 0) a la izquierda, el último a la derecha
+    for (let i = 0; i < elementos.length; i++) {
+        const divNodo = document.createElement('div');
+        divNodo.classList.add('nodo-cola');
+        divNodo.textContent = elementos[i];
+        colaVisualizador.appendChild(divNodo);
+    }
+}
+
+// --- EVENTOS (Interacciones del usuario) ---
+
+// Botón ENQUEUE (Insertar al final)
+btnColaEnqueue.addEventListener('click', () => {
+    const valor = colaInput.value.trim();
+    if (valor === '') {
+        alert('Por favor, escribe un valor para agregar a la cola.');
+        return;
+    }
+
+    const exito = miCola.enqueue(valor);
+
+    if (!exito) {
+        alert(`¡Error: Queue Overflow! La cola ha alcanzado su límite máximo de ${miCola.getLimite()} elementos.`);
+        return;
+    }
+
+    colaInput.value = '';
+    colaInput.focus();
+    renderizarCola();
+});
+
+// Permitir presionar la tecla "Enter" dentro del input para hacer Enqueue
+colaInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        btnColaEnqueue.click();
+    }
+});
+
+// Botón DEQUEUE (Atender el frente)
+btnColaDequeue.addEventListener('click', () => {
+    if (miCola.isEmpty()) {
+        alert('La cola está vacía. No hay nadie a quien atender.');
+        return;
+    }
+
+    const elementoAtendido = miCola.dequeue();
+    alert(`Se atendió del frente: "${elementoAtendido}"`);
+    renderizarCola();
+});
+
+// Botón PEEK (Mirar el frente)
+btnColaPeek.addEventListener('click', () => {
+    if (miCola.isEmpty()) {
+        alert('La cola está vacía.');
+        return;
+    }
+
+    const frente = miCola.peek();
+    alert(`El elemento al frente (Front) actual es: "${frente}"`);
+});
+
+// Botón VACIA (Clear)
+btnColaClear.addEventListener('click', () => {
+    if (miCola.isEmpty()) {
+        alert('La cola ya está vacía.');
+        return;
+    }
+
+    if (confirm('¿Estás seguro de que deseas vaciar toda la cola?')) {
+        miCola.clear();
+        renderizarCola();
+    }
+});
+
+// Inicializamos el simulador dibujando la cola (comenzará vacía)
+renderizarCola();
+
+
+// ==========================================================================
 // CONTROLADORES DE OTRAS ESTRUCTURAS
 // ==========================================================================
-// Tus compañeros de Cola, Lista, Árbol y Heap escribirán sus respectivos
+// Tus compañeros de Lista, Árbol y Heap escribirán sus respectivos
 // bloques de eventos y renderizados aquí abajo.

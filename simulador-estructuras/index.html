@@ -67,14 +67,28 @@
                     <h1>Simulador de Cola (Queue)</h1>
                     <p>Estructura FIFO (First In, First Out). El primero en llegar es el primero en ser atendido.</p>
                 </header>
+
                 <div class="control-panel">
-                    <input type="text" id="cola-input" placeholder="Valor">
-                    <button id="btn-cola-enqueue" class="btn btn-primary">Enqueue</button>
-                    <button id="btn-cola-dequeue" class="btn btn-danger">Dequeue</button>
+                    <div class="input-group">
+                        <input type="text" id="cola-input" placeholder="Valor (ej. 42 o 'A')">
+                        <button id="btn-cola-enqueue" class="btn btn-primary">Enqueue (Encolar)</button>
+                    </div>
+                    <div class="action-group">
+                        <button id="btn-cola-dequeue" class="btn btn-danger">Dequeue (Desencolar)</button>
+                        <button id="btn-cola-peek" class="btn btn-info">Peek (Ver Frente)</button>
+                        <button id="btn-cola-clear" class="btn btn-warning">Vaciar</button>
+                    </div>
                 </div>
+
+                <div class="status-bar">
+                    <span><strong>Estado:</strong> <span id="cola-status" class="status-text">Vacía</span></span>
+                    <span><strong>Frente (Peek):</strong> <span id="cola-peek-val">-</span></span>
+                </div>
+
                 <div class="canvas-container">
                     <div id="cola-visualizador" class="cola-visual">
-                        </div>
+                        <div class="cola-vacia-msg">La cola está vacía. ¡Agrega un elemento!</div>
+                    </div>
                 </div>
             </section>
 
@@ -100,7 +114,7 @@
     <script src="../js/cola.js"></script>
     <script src="../js/lista.js"></script>
     <script src="../js/arbol.js"></script>
-    <script src="heap.js"></script>
+    <script src="../js/heap.js"></script>
     
     <script src="../js/main.js"></script>
 </body>
