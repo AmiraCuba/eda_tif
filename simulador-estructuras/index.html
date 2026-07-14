@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Estructuras de Datos</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2><i class="fa-solid fa-gears"></i> Simulador</h2>
+            <nav>
+                <button class="nav-btn active" data-target="pila">
+                    <i class="fa-solid fa-layer-group"></i> Pila (Stack)
+                </button>
+                <button class="nav-btn" data-target="cola">
+                    <i class="fa-solid fa-users"></i> Cola (Queue)
+                </button>
+                <button class="nav-btn" data-target="lista">
+                    <i class="fa-solid fa-list-ol"></i> Lista Enlazada
+                </button>
+                <button class="nav-btn" data-target="arbol">
+                    <i class="fa-solid fa-tree"></i> Árbol Binario
+                </button>
+                <button class="nav-btn" data-target="heap">
+                    <i class="fa-solid fa-cubes"></i> Heap
+                </button>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            
+            <section id="sec-pila" class="sim-section active">
+                <header class="section-header">
+                    <h1>Simulador de Pila (Stack)</h1>
+                    <p>Estructura LIFO (Last In, First Out). El último elemento en entrar es el primero en salir.</p>
+                </header>
+
+                <div class="control-panel">
+                    <div class="input-group">
+                        <input type="text" id="pila-input" placeholder="Valor (ej. 42 o 'A')">
+                        <button id="btn-pila-push" class="btn btn-primary">Push (Empujar)</button>
+                    </div>
+                    <div class="action-group">
+                        <button id="btn-pila-pop" class="btn btn-danger">Pop (Sacar)</button>
+                        <button id="btn-pila-peek" class="btn btn-info">Peek (Ver Cima)</button>
+                        <button id="btn-pila-clear" class="btn btn-warning">Vaciar</button>
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <span><strong>Estado:</strong> <span id="pila-status" class="status-text">Vacía</span></span>
+                    <span><strong>Cima (Peek):</strong> <span id="pila-peek-val">-</span></span>
+                </div>
+
+                <div class="canvas-container">
+                    <div id="pila-visualizador" class="pila-visual">
+                        <div class="pila-vacia-msg">La pila está vacía. ¡Agrega un elemento!</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sec-cola" class="sim-section">
+                <header class="section-header">
+                    <h1>Simulador de Cola (Queue)</h1>
+                    <p>Estructura FIFO (First In, First Out). El primero en llegar es el primero en ser atendido.</p>
+                </header>
+                <div class="control-panel">
+                    <input type="text" id="cola-input" placeholder="Valor">
+                    <button id="btn-cola-enqueue" class="btn btn-primary">Enqueue</button>
+                    <button id="btn-cola-dequeue" class="btn btn-danger">Dequeue</button>
+                </div>
+                <div class="canvas-container">
+                    <div id="cola-visualizador" class="cola-visual">
+                        </div>
+                </div>
+            </section>
+
+            <section id="sec-lista" class="sim-section">
+                <header class="section-header"><h1>Lista Enlazada</h1></header>
+                <div class="canvas-container"><div id="lista-visualizador"></div></div>
+            </section>
+
+            <section id="sec-arbol" class="sim-section">
+                <header class="section-header"><h1>Árbol Binario</h1></header>
+                <div class="canvas-container"><div id="arbol-visualizador"></div></div>
+            </section>
+
+            <section id="sec-heap" class="sim-section">
+                <header class="section-header"><h1>Heap</h1></header>
+                <div class="canvas-container"><div id="heap-visualizador"></div></div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="../js/pila.js"></script>
+    <script src="../js/cola.js"></script>
+    <script src="../js/lista.js"></script>
+    <script src="../js/arbol.js"></script>
+    <script src="heap.js"></script>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>
