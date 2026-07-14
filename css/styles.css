@@ -493,6 +493,211 @@ body {
 }
 
 /* ==========================================================================
+   VISUALIZADOR DEL ÁRBOL BINARIO
+   ========================================================================== */
+
+/* Barra de información del árbol: nodos, recorrido y botones de tipo */
+.arbol-info-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Botones de tipo de recorrido (In-Order, Pre-Order, Post-Order) */
+.recorrido-btns {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+}
+
+/* Estilo base del botón de recorrido */
+.recorrido-btn {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.recorrido-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--text-main);
+}
+
+.recorrido-btn.active {
+    background: linear-gradient(135deg, var(--color-primary), #96748a);
+    color: #ffffff;
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(169, 132, 155, 0.3);
+}
+
+.traversal-text {
+    color: var(--color-primary);
+    font-weight: 700;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Banner de resultado de búsqueda (éxito/fallo) */
+.arbol-resultado {
+    display: none;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    text-align: center;
+    animation: resultadoSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Banner de éxito: nodo encontrado (verde menta) */
+.arbol-resultado--exito {
+    display: block;
+    background: linear-gradient(135deg, #d4e5d9, #bdd6c2);
+    color: #3a6b4a;
+    border: 1.5px solid #8da99b;
+}
+
+/* Banner de fallo: nodo no encontrado (rosa pastel) */
+.arbol-resultado--fallo {
+    display: block;
+    background: linear-gradient(135deg, #f2d4d7, #e8bfc3);
+    color: #7a3e47;
+    border: 1.5px solid #d9a0a0;
+}
+
+.resultado-icono {
+    font-size: 1rem;
+    margin-right: 6px;
+}
+
+/* Contenedor visual del árbol (centra los nodos) */
+.arbol-visual {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 10px;
+}
+
+/* Mensaje cuando el árbol está vacío */
+.arbol-vacia-msg {
+    color: var(--text-muted);
+    font-family: 'Inter', system-ui, sans-serif;
+    text-align: center;
+    font-style: italic;
+    font-size: 0.9rem;
+    width: 100%;
+    padding-top: 40px;
+}
+
+/* Wrapper de cada nodo (contiene el nodo circular y sus hijos) */
+.arbol-nodo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Nodo circular del árbol (gradiente cálido, no blanco puro) */
+.nodo-arbol {
+    background: linear-gradient(145deg, #fdf6ef, #f0e4d7);
+    color: var(--text-main);
+    text-align: center;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    border-radius: 50%;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    border: 2px solid #d9c4b5;
+    box-shadow: 0 4px 14px rgba(141, 115, 101, 0.15);
+    animation: pushBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+/* Nodo raíz: destacado con gradiente rosa y sombra malva */
+.nodo-raiz {
+    background: linear-gradient(145deg, var(--bg-sidebar-active), #e0b8bd);
+    border: 2px solid #c9a0a5;
+    box-shadow: 0 8px 24px rgba(169, 132, 155, 0.35);
+}
+
+/* Etiqueta "Raíz" debajo del nodo raíz */
+.nodo-raiz::after {
+    content: "Raíz";
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.6rem;
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-muted);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Nodo durante la animación de búsqueda (borde malva con glow) */
+.nodo-buscando {
+    background: linear-gradient(145deg, #ebdcd0, #dcc8b8) !important;
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 4px rgba(169, 132, 155, 0.3), 0 4px 16px rgba(169, 132, 155, 0.25) !important;
+    animation: buscarPulse 0.6s ease-in-out;
+}
+
+/* Nodo encontrado al finalizar la búsqueda (verde menta con pop) */
+.nodo-encontrado {
+    background: linear-gradient(145deg, #d4e5d9, #b8d4be) !important;
+    border-color: var(--color-success) !important;
+    box-shadow: 0 0 0 5px rgba(141, 169, 155, 0.35), 0 6px 20px rgba(141, 169, 155, 0.3) !important;
+    animation: encontradoPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Nodo placeholder para hijos inexistentes (círculo punteado transparente) */
+.nodo-placeholder {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px dashed #d9c4b5;
+    background: rgba(240, 228, 215, 0.2);
+    opacity: 0.35;
+}
+
+/* Contenedor de los hijos izquierdo y derecho de un nodo */
+.arbol-hijos {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+/* Wrapper individual de cada hijo (izquierdo o derecho) */
+.arbol-hijo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Línea conectora entre nodo padre e hijo */
+.arbol-hijo::before {
+    content: "";
+    display: block;
+    width: 2px;
+    height: 16px;
+    background: #c9a0a5;
+}
+
+/* ==========================================================================
    ANIMACIONES
    ========================================================================== */
 @keyframes pushBounce {
@@ -504,6 +709,26 @@ body {
         transform: translateY(0) scale(1);
         opacity: 1;
     }
+}
+
+/* Animación de pulso durante la búsqueda de un nodo */
+@keyframes buscarPulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/* Animación de pop cuando se encuentra el nodo */
+@keyframes encontradoPop {
+    0%   { transform: scale(0.7); opacity: 0.5; }
+    60%  { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Animación del banner de resultado (desliza hacia abajo) */
+@keyframes resultadoSlide {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInPage {

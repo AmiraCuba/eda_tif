@@ -1,13 +1,9 @@
 // ==========================================================================
 // INSTANCIACIÓN DE LAS ESTRUCTURAS DE DATOS
 // ==========================================================================
-// Instanciamos tu clase Pila. Queda de forma global para usarla en todo este script.
-// Creamos la pila con un límite máximo de 5 elementos para que luzca perfecta en el CSS
 const miPila = new Pila(5);
-
-// Instanciamos la Cola con un límite máximo de 5 elementos
 const miCola = new Cola(5);
-// const miLista = new Lista();
+const miArbol = new ArbolBinario();
 
 
 // ==========================================================================
@@ -265,9 +261,281 @@ btnColaClear.addEventListener('click', () => {
 // Inicializamos el simulador dibujando la cola (comenzará vacía)
 renderizarCola();
 
+// ==========================================================================
+// CONTROLADOR VISUAL DEL ÁRBOL BINARIO
+// ==========================================================================
 
-// ==========================================================================
-// CONTROLADORES DE OTRAS ESTRUCTURAS
-// ==========================================================================
-// Tus compañeros de Lista, Árbol y Heap escribirán sus respectivos
-// bloques de eventos y renderizados aquí abajo.
+// Captura de elementos del HTML
+const arbolInput = document.getElementById('arbol-input');
+const btnArbolInsertar = document.getElementById('btn-arbol-insertar');
+const btnArbolBuscar = document.getElementById('btn-arbol-buscar');
+const btnArbolEliminar = document.getElementById('btn-arbol-eliminar');
+const btnArbolVaciar = document.getElementById('btn-arbol-vaciar');
+const arbolVisualizador = document.getElementById('arbol-visualizador');
+const arbolResultado = document.getElementById('arbol-resultado');
+const arbolStatusText = document.getElementById('arbol-status');
+const arbolRecorridoText = document.getElementById('arbol-recorrido');
+const recorridoBtns = document.querySelectorAll('.recorrido-btn');
+let recorridoActual = 'inOrder';
+
+/**
+ * Renderiza el árbol completo en el DOM de forma recursiva.
+ * También muestra el recorrido seleccionado (inOrder, preOrder o postOrder).
+ */
+function renderizarArbol() {
+    arbolVisualizador.innerHTML = '';
+
+    if (miArbol.isEmpty()) {
+        arbolVisualizador.innerHTML = '<div class="arbol-vacia-msg">El árbol está vacío. ¡Inserta un nodo!</div>';
+        arbolStatusText.textContent = 'Vacío';
+        arbolStatusText.style.color = 'var(--color-danger)';
+        arbolRecorridoText.textContent = '-';
+        return;
+    }
+
+    arbolStatusText.textContent = `${miArbol.size()} nodos`;
+    arbolStatusText.style.color = 'var(--color-success)';
+
+    const metodoRecorrido = miArbol[recorridoActual]();
+    arbolRecorridoText.textContent = metodoRecorrido.join(' → ');
+
+    const estructura = miArbol.getEstructura();
+    arbolVisualizador.appendChild(crearNodoArbol(estructura, 0));
+}
+
+/**
+ * Crea un nodo visual del árbol de forma recursiva.
+ * Genera el div circular, sus hijos izquierdo y derecho, y placeholders si no existen.
+ * @param {Object} nodo - Objeto con valor, izquierda y derecha
+ * @param {number} nivel - Nivel de profundidad (0 = raíz)
+ * @returns {HTMLElement} El elemento DOM del nodo
+ */
+function crearNodoArbol(nodo, nivel) {
+    if (nodo === null) return null;
+
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('arbol-nodo-wrapper');
+
+    const divNodo = document.createElement('div');
+    divNodo.classList.add('nodo-arbol');
+    if (nivel === 0) divNodo.classList.add('nodo-raiz');
+    divNodo.textContent = nodo.valor;
+    divNodo.setAttribute('data-valor', nodo.valor);
+
+    wrapper.appendChild(divNodo);
+
+    const tieneHijos = nodo.izquierda !== null || nodo.derecha !== null;
+    if (tieneHijos) {
+        const hijosContainer = document.createElement('div');
+        hijosContainer.classList.add('arbol-hijos');
+
+        const izq = document.createElement('div');
+        izq.classList.add('arbol-hijo');
+        if (nodo.izquierda) {
+            const sub = crearNodoArbol(nodo.izquierda, nivel + 1);
+            if (sub) izq.appendChild(sub);
+        } else {
+            izq.appendChild(crearPlaceholder());
+        }
+        hijosContainer.appendChild(izq);
+
+        const der = document.createElement('div');
+        der.classList.add('arbol-hijo');
+        if (nodo.derecha) {
+            const sub = crearNodoArbol(nodo.derecha, nivel + 1);
+            if (sub) der.appendChild(sub);
+        } else {
+            der.appendChild(crearPlaceholder());
+        }
+        hijosContainer.appendChild(der);
+
+        wrapper.appendChild(hijosContainer);
+    }
+
+    return wrapper;
+}
+
+/**
+ * Crea un nodo placeholder visual (círculo punteado transparente)
+ * para hijos inexistentes en el árbol.
+ * @returns {HTMLElement} Elemento DOM del placeholder
+ */
+function crearPlaceholder() {
+    const ph = document.createElement('div');
+    ph.classList.add('nodo-placeholder');
+    return ph;
+}
+
+// --- EVENTOS DEL ÁRBOL ---
+
+/**
+ * Botón INSERTAR: Agrega un valor al árbol BST.
+ * Acepta números y texto. Evita duplicados.
+ */
+btnArbolInsertar.addEventListener('click', () => {
+    const valor = arbolInput.value.trim();
+    if (valor === '') {
+        alert('Escribe un valor para insertar.');
+        return;
+    }
+
+    const num = Number(valor);
+    const dato = isNaN(num) ? valor : num;
+
+    const exito = miArbol.insertar(dato);
+    if (!exito) {
+        alert(`El valor "${dato}" ya existe en el árbol.`);
+        return;
+    }
+
+    arbolInput.value = '';
+    arbolInput.focus();
+    renderizarArbol();
+});
+
+// Permitir presionar "Enter" en el input para insertar directamente
+arbolInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') btnArbolInsertar.click();
+});
+
+/**
+ * Botón BUSCAR: Anima el recorrido nodo por nodo por el camino BST.
+ * Ilumina cada nodo visitado y muestra un banner con el resultado.
+ * Los botones se deshabilitan durante la animación.
+ */
+btnArbolBuscar.addEventListener('click', () => {
+    const valor = arbolInput.value.trim();
+    if (valor === '') {
+        alert('Escribe un valor para buscar.');
+        return;
+    }
+
+    const num = Number(valor);
+    const dato = isNaN(num) ? valor : num;
+
+    const camino = [];
+    let actual = miArbol.raiz;
+    while (actual !== null) {
+        camino.push(actual.valor);
+        if (dato === actual.valor) break;
+        actual = dato < actual.valor ? actual.izquierda : actual.derecha;
+    }
+
+    if (camino.length === 0) return;
+
+    const nodosEnDOM = document.querySelectorAll('.nodo-arbol');
+    nodosEnDOM.forEach(n => {
+        n.classList.remove('nodo-buscando', 'nodo-encontrado');
+    });
+
+    btnArbolInsertar.disabled = true;
+    btnArbolBuscar.disabled = true;
+    btnArbolEliminar.disabled = true;
+    btnArbolVaciar.disabled = true;
+
+    let i = 0;
+    function animarPaso() {
+        if (i > 0) {
+            const prev = document.querySelector(`.nodo-arbol[data-valor="${camino[i - 1]}"]`);
+            if (prev) prev.classList.remove('nodo-buscando');
+        }
+
+        if (i < camino.length) {
+            const nodo = document.querySelector(`.nodo-arbol[data-valor="${camino[i]}"]`);
+            if (nodo) {
+                nodo.classList.add('nodo-buscando');
+                nodo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            i++;
+            setTimeout(animarPaso, 700);
+        } else {
+            const encontrado = miArbol.buscar(dato);
+            const ultimo = camino[camino.length - 1];
+            const nodoFinal = document.querySelector(`.nodo-arbol[data-valor="${ultimo}"]`);
+
+            if (encontrado && nodoFinal) {
+                nodoFinal.classList.remove('nodo-buscando');
+                nodoFinal.classList.add('nodo-encontrado');
+                arbolResultado.innerHTML = `<span class="resultado-icono">&#10003;</span> Nodo <strong>"${ultimo}"</strong> encontrado`;
+                arbolResultado.className = 'arbol-resultado arbol-resultado--exito';
+            } else {
+                arbolResultado.innerHTML = `<span class="resultado-icono">&#10007;</span> Nodo <strong>"${dato}"</strong> no encontrado`;
+                arbolResultado.className = 'arbol-resultado arbol-resultado--fallo';
+            }
+
+            btnArbolInsertar.disabled = false;
+            btnArbolBuscar.disabled = false;
+            btnArbolEliminar.disabled = false;
+            btnArbolVaciar.disabled = false;
+
+            setTimeout(() => {
+                nodosEnDOM.forEach(n => {
+                    n.classList.remove('nodo-buscando', 'nodo-encontrado');
+                });
+                arbolResultado.className = 'arbol-resultado';
+                arbolResultado.innerHTML = '';
+            }, 2500);
+        }
+    }
+
+    animarPaso();
+});
+
+/**
+ * Botón ELIMINAR: Elimina un nodo del árbol BST.
+ * Maneja los 3 casos: hoja, un hijo y dos hijos (reemplazo por sucesor).
+ */
+btnArbolEliminar.addEventListener('click', () => {
+    if (miArbol.isEmpty()) {
+        alert('El árbol está vacío, no hay nada que eliminar.');
+        return;
+    }
+
+    const valor = arbolInput.value.trim();
+    if (valor === '') {
+        alert('Escribe un valor para eliminar.');
+        return;
+    }
+
+    const num = Number(valor);
+    const dato = isNaN(num) ? valor : num;
+
+    const exito = miArbol.eliminar(dato);
+    if (!exito) {
+        alert(`El valor "${dato}" no existe en el árbol.`);
+        return;
+    }
+
+    arbolInput.value = '';
+    arbolInput.focus();
+    renderizarArbol();
+});
+
+/**
+ * Botón VACIAR: Elimina todos los nodos del árbol.
+ * Pide confirmación antes de ejecutar.
+ */
+btnArbolVaciar.addEventListener('click', () => {
+    if (miArbol.isEmpty()) {
+        alert('El árbol ya está vacío.');
+        return;
+    }
+
+    if (confirm('¿Estás seguro de que deseas vaciar todo el árbol?')) {
+        miArbol.vaciar();
+        renderizarArbol();
+    }
+});
+
+// --- BOTONES DE RECORRIDO (In-Order, Pre-Order, Post-Order) ---
+// Cambian el tipo de recorrido mostrado en la barra de información
+recorridoBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        recorridoBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        recorridoActual = btn.getAttribute('data-recorrido');
+        renderizarArbol();
+    });
+});
+
+renderizarArbol();
