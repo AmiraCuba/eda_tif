@@ -152,6 +152,243 @@ renderizarPila();
 
 
 // ==========================================================================
+// CONTROLADOR VISUAL DE LA LISTA ENLAZADA
+// ==========================================================================
+
+const listaInput = document.getElementById("lista-input");
+const btnListaInsertar = document.getElementById("btn-lista-insertar");
+const btnListaInsertarInicio = document.getElementById(
+    "btn-lista-insertar-inicio"
+);
+const btnListaBuscar = document.getElementById("btn-lista-buscar");
+const btnListaEliminar = document.getElementById("btn-lista-eliminar");
+const btnListaVaciar = document.getElementById("btn-lista-vaciar");
+
+const listaVisualizador = document.getElementById(
+    "lista-visualizador"
+);
+
+const listaStatus = document.getElementById("lista-status");
+const listaCabeza = document.getElementById("lista-cabeza");
+const listaResultado = document.getElementById("lista-resultado");
+
+/**
+ * Convierte los números ingresados a Number.
+ * El texto se conserva como String.
+ */
+function obtenerDatoLista() {
+    const valor = listaInput.value.trim();
+    const numero = Number(valor);
+
+    if (valor !== "" && !isNaN(numero)) {
+        return numero;
+    }
+
+    return valor;
+}
+
+/**
+ * Dibuja todos los nodos de la lista.
+ */
+function renderizarLista() {
+    listaVisualizador.innerHTML = "";
+    listaResultado.textContent = "";
+    listaResultado.className = "lista-resultado";
+
+    if (miLista.isEmpty()) {
+        listaVisualizador.innerHTML = `
+            <div class="lista-vacia-msg">
+                La lista está vacía. ¡Inserta un nodo!
+            </div>
+        `;
+
+        listaStatus.textContent = "Vacía";
+        listaCabeza.textContent = "-";
+        return;
+    }
+
+    listaStatus.textContent = `Activa (${miLista.size()} nodos)`;
+    listaCabeza.textContent = miLista.primero();
+
+    const elementos = miLista.getElements();
+
+    elementos.forEach((valor, indice) => {
+        const contenedor = document.createElement("div");
+        contenedor.classList.add("lista-nodo-wrapper");
+
+        const nodo = document.createElement("div");
+        nodo.classList.add("nodo-lista");
+        nodo.setAttribute("data-indice", indice);
+
+        const dato = document.createElement("span");
+        dato.classList.add("nodo-lista-valor");
+        dato.textContent = valor;
+
+        const enlace = document.createElement("span");
+        enlace.classList.add("nodo-lista-enlace");
+
+        if (indice === elementos.length - 1) {
+            enlace.textContent = "NULL";
+        } else {
+            enlace.textContent = "sig.";
+        }
+
+        nodo.appendChild(dato);
+        nodo.appendChild(enlace);
+        contenedor.appendChild(nodo);
+
+        if (indice < elementos.length - 1) {
+            const flecha = document.createElement("span");
+            flecha.classList.add("lista-flecha");
+            flecha.textContent = "→";
+
+            contenedor.appendChild(flecha);
+        }
+
+        listaVisualizador.appendChild(contenedor);
+    });
+}
+
+/**
+ * Inserta al final.
+ */
+btnListaInsertar.addEventListener("click", () => {
+    if (listaInput.value.trim() === "") {
+        alert("Escribe un valor para insertar.");
+        return;
+    }
+
+    miLista.insertar(obtenerDatoLista());
+
+    listaInput.value = "";
+    listaInput.focus();
+
+    renderizarLista();
+});
+
+/**
+ * Inserta al inicio.
+ */
+btnListaInsertarInicio.addEventListener("click", () => {
+    if (listaInput.value.trim() === "") {
+        alert("Escribe un valor para insertar.");
+        return;
+    }
+
+    miLista.insertarInicio(obtenerDatoLista());
+
+    listaInput.value = "";
+    listaInput.focus();
+
+    renderizarLista();
+});
+
+/**
+ * Busca un valor.
+ */
+btnListaBuscar.addEventListener("click", () => {
+    if (listaInput.value.trim() === "") {
+        alert("Escribe un valor para buscar.");
+        return;
+    }
+
+    const valor = obtenerDatoLista();
+    const encontrado = miLista.buscar(valor);
+
+    document
+        .querySelectorAll(".nodo-lista")
+        .forEach((nodo) => {
+            nodo.classList.remove("nodo-lista-encontrado");
+        });
+
+    if (encontrado) {
+        const elementos = miLista.getElements();
+        const posicion = elementos.indexOf(valor);
+
+        const nodoEncontrado = document.querySelector(
+            `.nodo-lista[data-indice="${posicion}"]`
+        );
+
+        if (nodoEncontrado !== null) {
+            nodoEncontrado.classList.add(
+                "nodo-lista-encontrado"
+            );
+        }
+
+        listaResultado.textContent =
+            `Valor "${valor}" encontrado`;
+
+        listaResultado.className =
+            "lista-resultado lista-resultado--exito";
+    } else {
+        listaResultado.textContent =
+            `Valor "${valor}" no encontrado`;
+
+        listaResultado.className =
+            "lista-resultado lista-resultado--fallo";
+    }
+});
+
+/**
+ * Elimina la primera coincidencia.
+ */
+btnListaEliminar.addEventListener("click", () => {
+    if (miLista.isEmpty()) {
+        alert("La lista está vacía.");
+        return;
+    }
+
+    if (listaInput.value.trim() === "") {
+        alert("Escribe un valor para eliminar.");
+        return;
+    }
+
+    const valor = obtenerDatoLista();
+    const eliminado = miLista.eliminar(valor);
+
+    if (!eliminado) {
+        alert(`El valor "${valor}" no existe en la lista.`);
+        return;
+    }
+
+    listaInput.value = "";
+    listaInput.focus();
+
+    renderizarLista();
+});
+
+/**
+ * Vacía la lista.
+ */
+btnListaVaciar.addEventListener("click", () => {
+    if (miLista.isEmpty()) {
+        alert("La lista ya está vacía.");
+        return;
+    }
+
+    const confirmar = confirm(
+        "¿Estás seguro de que deseas vaciar toda la lista?"
+    );
+
+    if (confirmar) {
+        miLista.vaciar();
+        renderizarLista();
+    }
+});
+
+/**
+ * Inserta al final al presionar Enter.
+ */
+listaInput.addEventListener("keypress", (evento) => {
+    if (evento.key === "Enter") {
+        btnListaInsertar.click();
+    }
+});
+
+// La lista comienza vacía.
+renderizarLista();
+
+// ==========================================================================
 // CONTROLADOR VISUAL DE LA COLA
 // ==========================================================================
 
@@ -540,240 +777,3 @@ recorridoBtns.forEach(btn => {
 });
 
 renderizarArbol();
-
-// ==========================================================================
-// CONTROLADOR VISUAL DE LA LISTA ENLAZADA
-// ==========================================================================
-
-const listaInput = document.getElementById("lista-input");
-const btnListaInsertar = document.getElementById("btn-lista-insertar");
-const btnListaInsertarInicio = document.getElementById(
-    "btn-lista-insertar-inicio"
-);
-const btnListaBuscar = document.getElementById("btn-lista-buscar");
-const btnListaEliminar = document.getElementById("btn-lista-eliminar");
-const btnListaVaciar = document.getElementById("btn-lista-vaciar");
-
-const listaVisualizador = document.getElementById(
-    "lista-visualizador"
-);
-
-const listaStatus = document.getElementById("lista-status");
-const listaCabeza = document.getElementById("lista-cabeza");
-const listaResultado = document.getElementById("lista-resultado");
-
-/**
- * Convierte los números ingresados a Number.
- * El texto se conserva como String.
- */
-function obtenerDatoLista() {
-    const valor = listaInput.value.trim();
-    const numero = Number(valor);
-
-    if (valor !== "" && !isNaN(numero)) {
-        return numero;
-    }
-
-    return valor;
-}
-
-/**
- * Dibuja todos los nodos de la lista.
- */
-function renderizarLista() {
-    listaVisualizador.innerHTML = "";
-    listaResultado.textContent = "";
-    listaResultado.className = "lista-resultado";
-
-    if (miLista.isEmpty()) {
-        listaVisualizador.innerHTML = `
-            <div class="lista-vacia-msg">
-                La lista está vacía. ¡Inserta un nodo!
-            </div>
-        `;
-
-        listaStatus.textContent = "Vacía";
-        listaCabeza.textContent = "-";
-        return;
-    }
-
-    listaStatus.textContent = `Activa (${miLista.size()} nodos)`;
-    listaCabeza.textContent = miLista.primero();
-
-    const elementos = miLista.getElements();
-
-    elementos.forEach((valor, indice) => {
-        const contenedor = document.createElement("div");
-        contenedor.classList.add("lista-nodo-wrapper");
-
-        const nodo = document.createElement("div");
-        nodo.classList.add("nodo-lista");
-        nodo.setAttribute("data-indice", indice);
-
-        const dato = document.createElement("span");
-        dato.classList.add("nodo-lista-valor");
-        dato.textContent = valor;
-
-        const enlace = document.createElement("span");
-        enlace.classList.add("nodo-lista-enlace");
-
-        if (indice === elementos.length - 1) {
-            enlace.textContent = "NULL";
-        } else {
-            enlace.textContent = "sig.";
-        }
-
-        nodo.appendChild(dato);
-        nodo.appendChild(enlace);
-        contenedor.appendChild(nodo);
-
-        if (indice < elementos.length - 1) {
-            const flecha = document.createElement("span");
-            flecha.classList.add("lista-flecha");
-            flecha.textContent = "→";
-
-            contenedor.appendChild(flecha);
-        }
-
-        listaVisualizador.appendChild(contenedor);
-    });
-}
-
-/**
- * Inserta al final.
- */
-btnListaInsertar.addEventListener("click", () => {
-    if (listaInput.value.trim() === "") {
-        alert("Escribe un valor para insertar.");
-        return;
-    }
-
-    miLista.insertar(obtenerDatoLista());
-
-    listaInput.value = "";
-    listaInput.focus();
-
-    renderizarLista();
-});
-
-/**
- * Inserta al inicio.
- */
-btnListaInsertarInicio.addEventListener("click", () => {
-    if (listaInput.value.trim() === "") {
-        alert("Escribe un valor para insertar.");
-        return;
-    }
-
-    miLista.insertarInicio(obtenerDatoLista());
-
-    listaInput.value = "";
-    listaInput.focus();
-
-    renderizarLista();
-});
-
-/**
- * Busca un valor.
- */
-btnListaBuscar.addEventListener("click", () => {
-    if (listaInput.value.trim() === "") {
-        alert("Escribe un valor para buscar.");
-        return;
-    }
-
-    const valor = obtenerDatoLista();
-    const encontrado = miLista.buscar(valor);
-
-    document
-        .querySelectorAll(".nodo-lista")
-        .forEach((nodo) => {
-            nodo.classList.remove("nodo-lista-encontrado");
-        });
-
-    if (encontrado) {
-        const elementos = miLista.getElements();
-        const posicion = elementos.indexOf(valor);
-
-        const nodoEncontrado = document.querySelector(
-            `.nodo-lista[data-indice="${posicion}"]`
-        );
-
-        if (nodoEncontrado !== null) {
-            nodoEncontrado.classList.add(
-                "nodo-lista-encontrado"
-            );
-        }
-
-        listaResultado.textContent =
-            `Valor "${valor}" encontrado`;
-
-        listaResultado.className =
-            "lista-resultado lista-resultado--exito";
-    } else {
-        listaResultado.textContent =
-            `Valor "${valor}" no encontrado`;
-
-        listaResultado.className =
-            "lista-resultado lista-resultado--fallo";
-    }
-});
-
-/**
- * Elimina la primera coincidencia.
- */
-btnListaEliminar.addEventListener("click", () => {
-    if (miLista.isEmpty()) {
-        alert("La lista está vacía.");
-        return;
-    }
-
-    if (listaInput.value.trim() === "") {
-        alert("Escribe un valor para eliminar.");
-        return;
-    }
-
-    const valor = obtenerDatoLista();
-    const eliminado = miLista.eliminar(valor);
-
-    if (!eliminado) {
-        alert(`El valor "${valor}" no existe en la lista.`);
-        return;
-    }
-
-    listaInput.value = "";
-    listaInput.focus();
-
-    renderizarLista();
-});
-
-/**
- * Vacía la lista.
- */
-btnListaVaciar.addEventListener("click", () => {
-    if (miLista.isEmpty()) {
-        alert("La lista ya está vacía.");
-        return;
-    }
-
-    const confirmar = confirm(
-        "¿Estás seguro de que deseas vaciar toda la lista?"
-    );
-
-    if (confirmar) {
-        miLista.vaciar();
-        renderizarLista();
-    }
-});
-
-/**
- * Inserta al final al presionar Enter.
- */
-listaInput.addEventListener("keypress", (evento) => {
-    if (evento.key === "Enter") {
-        btnListaInsertar.click();
-    }
-});
-
-// La lista comienza vacía.
-renderizarLista();
