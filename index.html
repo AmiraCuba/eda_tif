@@ -93,8 +93,33 @@
             </section>
 
             <section id="sec-lista" class="sim-section">
-                <header class="section-header"><h1>Lista Enlazada</h1></header>
-                <div class="canvas-container"><div id="lista-visualizador"></div></div>
+                <header class="section-header">
+                    <h1>Simulador de Lista Enlazada</h1>
+                    <p>Los nodos se conectan desde la cabeza hasta llegar a NULL.</p>
+                </header>
+
+                <div class="control-panel">
+                    <div class="input-group">
+                        <input type="text" id="lista-input" placeholder="Valor">
+                        <button id="btn-lista-insertar" class="btn btn-primary">Insertar al final</button>
+                        <button id="btn-lista-insertar-inicio" class="btn btn-info">Insertar al inicio</button>
+                    </div>
+                    <div class="action-group">
+                        <button id="btn-lista-buscar" class="btn btn-info">Buscar</button>
+                        <button id="btn-lista-eliminar" class="btn btn-danger">Eliminar</button>
+                        <button id="btn-lista-vaciar" class="btn btn-warning">Vaciar</button>
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <span><strong>Estado:</strong> <span id="lista-status">Vacía</span></span>
+                    <span><strong>Cabeza:</strong> <span id="lista-cabeza">-</span></span>
+                </div>
+
+                <div class="canvas-container">
+                    <div id="lista-resultado" class="lista-resultado"></div>
+                    <div id="lista-visualizador"></div>
+                </div>
             </section>
 
             <section id="sec-arbol" class="sim-section">
