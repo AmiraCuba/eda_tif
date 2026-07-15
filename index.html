@@ -98,8 +98,43 @@
             </section>
 
             <section id="sec-arbol" class="sim-section">
-                <header class="section-header"><h1>Árbol Binario</h1></header>
-                <div class="canvas-container"><div id="arbol-visualizador"></div></div>
+               <header class="section-header">
+                    <h1>Simulador de Árbol Binario de Búsqueda</h1>
+                    <p>Estructura BST. Los menores van a la izquierda, los mayores a la derecha.</p>
+                </header>
+
+                <div class="control-panel">
+                    <div class="input-group">
+                        <input type="text" id="arbol-input" placeholder="Valor (ej. 42)">
+                        <button id="btn-arbol-insertar" class="btn btn-primary">Insertar</button>
+                    </div>
+                    <div class="action-group">
+                        <button id="btn-arbol-buscar" class="btn btn-info">Buscar</button>
+                        <button id="btn-arbol-eliminar" class="btn btn-danger">Eliminar</button>
+                        <button id="btn-arbol-vaciar" class="btn btn-warning">Vaciar</button>
+                    </div>
+                </div>
+
+                <div class="arbol-info-bar">
+                    <div class="status-bar">
+                        <span><strong>Nodos:</strong> <span id="arbol-status" class="status-text">Vacío</span></span>
+                    </div>
+                    <div class="status-bar">
+                        <span><strong>Recorrido:</strong> <span id="arbol-recorrido" class="traversal-text">-</span></span>
+                    </div>
+                    <div class="recorrido-btns">
+                        <button class="recorrido-btn active" data-recorrido="inOrder">In-Order</button>
+                        <button class="recorrido-btn" data-recorrido="preOrder">Pre-Order</button>
+                        <button class="recorrido-btn" data-recorrido="postOrder">Post-Order</button>
+                    </div>
+                </div>
+
+                <div class="canvas-container">
+                    <div id="arbol-resultado" class="arbol-resultado"></div>
+                    <div id="arbol-visualizador" class="arbol-visual">
+                        <div class="arbol-vacia-msg">El árbol está vacío. ¡Inserta un nodo!</div>
+                    </div>
+                </div>
             </section>
 
             <section id="sec-heap" class="sim-section">
