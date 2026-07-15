@@ -1,6 +1,5 @@
 /**
- * Clase que representa un nodo de una lista simplemente enlazada.
- * Cada nodo almacena un valor y una referencia al nodo siguiente.
+ * Nodo de una lista simplemente enlazada.
  */
 class NodoLista {
     constructor(valor) {
@@ -10,8 +9,7 @@ class NodoLista {
 }
 
 /**
- * Clase que representa una Lista Simplemente Enlazada.
- * Los nodos se conectan en un solo sentido desde la cabeza.
+ * Lista simplemente enlazada.
  */
 class ListaEnlazada {
     constructor() {
@@ -20,9 +18,7 @@ class ListaEnlazada {
     }
 
     /**
-     * Inserta un nuevo valor al final de la lista.
-     * @param {*} valor - El dato que se almacenará
-     * @returns {boolean} true cuando se inserta correctamente
+     * Inserta un valor al final.
      */
     insertar(valor) {
         const nuevoNodo = new NodoLista(valor);
@@ -45,9 +41,7 @@ class ListaEnlazada {
     }
 
     /**
-     * Inserta un nuevo valor al inicio de la lista.
-     * @param {*} valor - El dato que se almacenará
-     * @returns {boolean} true cuando se inserta correctamente
+     * Inserta un valor al inicio.
      */
     insertarInicio(valor) {
         const nuevoNodo = new NodoLista(valor);
@@ -60,9 +54,7 @@ class ListaEnlazada {
     }
 
     /**
-     * Verifica si un valor existe dentro de la lista.
-     * @param {*} valor - El dato que se desea buscar
-     * @returns {boolean} true si existe, false si no se encuentra
+     * Busca un valor.
      */
     buscar(valor) {
         let actual = this.cabeza;
@@ -79,9 +71,7 @@ class ListaEnlazada {
     }
 
     /**
-     * Elimina la primera aparición de un valor.
-     * @param {*} valor - El dato que se desea eliminar
-     * @returns {boolean} true si se eliminó, false si no existe
+     * Elimina la primera coincidencia.
      */
     eliminar(valor) {
         if (this.cabeza === null) {
@@ -112,8 +102,7 @@ class ListaEnlazada {
     }
 
     /**
-     * Devuelve el valor almacenado en la cabeza sin eliminarlo.
-     * @returns {*} El primer valor o null si la lista está vacía
+     * Devuelve el valor de la cabeza.
      */
     primero() {
         if (this.isEmpty()) {
@@ -123,33 +112,21 @@ class ListaEnlazada {
         return this.cabeza.valor;
     }
 
-    /**
-     * Verifica si la lista está vacía.
-     * @returns {boolean}
-     */
     isEmpty() {
         return this.cabeza === null;
     }
 
-    /**
-     * Devuelve la cantidad de nodos de la lista.
-     * @returns {number}
-     */
     size() {
         return this._size;
     }
 
-    /**
-     * Elimina todos los nodos de la lista.
-     */
     vaciar() {
         this.cabeza = null;
         this._size = 0;
     }
 
     /**
-     * Devuelve los valores de la lista en un arreglo.
-     * @returns {Array}
+     * Devuelve los valores como un arreglo.
      */
     getElements() {
         const elementos = [];
@@ -161,29 +138,6 @@ class ListaEnlazada {
         }
 
         return elementos;
-    }
-
-    /**
-     * Convierte la lista en una estructura sencilla para renderizarla.
-     * @returns {Object|null}
-     */
-    getEstructura() {
-        if (this.cabeza === null) {
-            return null;
-        }
-
-        const construir = (nodo) => {
-            if (nodo === null) {
-                return null;
-            }
-
-            return {
-                valor: nodo.valor,
-                siguiente: construir(nodo.siguiente)
-            };
-        };
-
-        return construir(this.cabeza);
     }
 }
 

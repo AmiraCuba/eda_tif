@@ -5,6 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Estructuras de Datos</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        /* Estilos exclusivos del módulo de lista enlazada */
+        .lista-visual {
+            display: flex;
+            align-items: center;
+            min-height: 220px;
+            padding: 28px;
+            overflow-x: auto;
+        }
+
+        .lista-nodo-wrapper {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .nodo-lista {
+            display: flex;
+            min-width: 110px;
+            overflow: hidden;
+            background: white;
+            border: 2px solid var(--color-primary, #9b6b82);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .nodo-lista-valor,
+        .nodo-lista-enlace {
+            padding: 14px 12px;
+            text-align: center;
+        }
+
+        .nodo-lista-valor {
+            min-width: 48px;
+            font-weight: 700;
+        }
+
+        .nodo-lista-enlace {
+            border-left: 1px solid #d8c5ce;
+            background: #f8eef3;
+            color: #765366;
+            font-size: 0.8rem;
+        }
+
+        .lista-flecha {
+            margin: 0 10px;
+            color: var(--color-primary, #9b6b82);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nodo-lista-encontrado {
+            transform: translateY(-5px);
+            border-color: var(--color-success, #42a879);
+            box-shadow: 0 0 0 4px rgba(66, 168, 121, 0.18);
+        }
+
+        .lista-vacia-msg {
+            width: 100%;
+            color: #777;
+            text-align: center;
+        }
+
+        .lista-resultado {
+            min-height: 24px;
+            margin: 12px 0;
+            font-weight: 700;
+        }
+
+        .lista-resultado--exito { color: var(--color-success, #27845a); }
+        .lista-resultado--fallo { color: var(--color-danger, #c14f5f); }
+    </style>
 </head>
 <body>
 
@@ -67,80 +140,53 @@
                     <h1>Simulador de Cola (Queue)</h1>
                     <p>Estructura FIFO (First In, First Out). El primero en llegar es el primero en ser atendido.</p>
                 </header>
-
                 <div class="control-panel">
-                    <div class="input-group">
-                        <input type="text" id="cola-input" placeholder="Valor (ej. 42 o 'A')">
-                        <button id="btn-cola-enqueue" class="btn btn-primary">Enqueue (Encolar)</button>
-                    </div>
-                    <div class="action-group">
-                        <button id="btn-cola-dequeue" class="btn btn-danger">Dequeue (Desencolar)</button>
-                        <button id="btn-cola-peek" class="btn btn-info">Peek (Ver Frente)</button>
-                        <button id="btn-cola-clear" class="btn btn-warning">Vaciar</button>
-                    </div>
+                    <input type="text" id="cola-input" placeholder="Valor">
+                    <button id="btn-cola-enqueue" class="btn btn-primary">Enqueue</button>
+                    <button id="btn-cola-dequeue" class="btn btn-danger">Dequeue</button>
                 </div>
-
-                <div class="status-bar">
-                    <span><strong>Estado:</strong> <span id="cola-status" class="status-text">Vacía</span></span>
-                    <span><strong>Frente (Peek):</strong> <span id="cola-peek-val">-</span></span>
-                </div>
-
                 <div class="canvas-container">
                     <div id="cola-visualizador" class="cola-visual">
-                        <div class="cola-vacia-msg">La cola está vacía. ¡Agrega un elemento!</div>
-                    </div>
+                        </div>
                 </div>
             </section>
 
             <section id="sec-lista" class="sim-section">
-                <header class="section-header"><h1>Lista Enlazada</h1></header>
-                <div class="canvas-container"><div id="lista-visualizador"></div></div>
-            </section>
-
-            <!-- ================================================================= -->
-            <!-- SECCIÓN: SIMULADOR DE ÁRBOL BINARIO DE BÚSQUEDA (BST)             -->
-            <!-- ================================================================= -->
-            <section id="sec-arbol" class="sim-section">
                 <header class="section-header">
-                    <h1>Simulador de Árbol Binario de Búsqueda</h1>
-                    <p>Estructura BST. Los menores van a la izquierda, los mayores a la derecha.</p>
+                    <h1>Simulador de Lista Enlazada</h1>
+                    <p>Los nodos se conectan desde la cabeza hasta llegar a NULL.</p>
                 </header>
 
-                <!-- Panel de controles: input para valor y botones de acción -->
                 <div class="control-panel">
                     <div class="input-group">
-                        <input type="text" id="arbol-input" placeholder="Valor (ej. 42)">
-                        <button id="btn-arbol-insertar" class="btn btn-primary">Insertar</button>
+                        <input type="text" id="lista-input" placeholder="Valor">
+                        <button id="btn-lista-insertar" class="btn btn-primary">Insertar al final</button>
+                        <button id="btn-lista-insertar-inicio" class="btn btn-info">Insertar al inicio</button>
                     </div>
                     <div class="action-group">
-                        <button id="btn-arbol-buscar" class="btn btn-info">Buscar</button>
-                        <button id="btn-arbol-eliminar" class="btn btn-danger">Eliminar</button>
-                        <button id="btn-arbol-vaciar" class="btn btn-warning">Vaciar</button>
+                        <button id="btn-lista-buscar" class="btn btn-info">Buscar</button>
+                        <button id="btn-lista-eliminar" class="btn btn-danger">Eliminar</button>
+                        <button id="btn-lista-vaciar" class="btn btn-warning">Vaciar</button>
                     </div>
                 </div>
 
-                <!-- Barra de información: cantidad de nodos, recorrido y botones de tipo de recorrido -->
-                <div class="arbol-info-bar">
-                    <div class="status-bar">
-                        <span><strong>Nodos:</strong> <span id="arbol-status" class="status-text">Vacío</span></span>
-                    </div>
-                    <div class="status-bar">
-                        <span><strong>Recorrido:</strong> <span id="arbol-recorrido" class="traversal-text">-</span></span>
-                    </div>
-                    <div class="recorrido-btns">
-                        <button class="recorrido-btn active" data-recorrido="inOrder">In-Order</button>
-                        <button class="recorrido-btn" data-recorrido="preOrder">Pre-Order</button>
-                        <button class="recorrido-btn" data-recorrido="postOrder">Post-Order</button>
-                    </div>
+                <div class="status-bar">
+                    <span><strong>Estado:</strong> <span id="lista-status">Vacía</span></span>
+                    <span><strong>Cabeza:</strong> <span id="lista-cabeza">-</span></span>
                 </div>
 
-                <!-- Contenedor visual del árbol con banner de resultado de búsqueda -->
+                <div id="lista-resultado" class="lista-resultado"></div>
+
                 <div class="canvas-container">
-                    <div id="arbol-resultado" class="arbol-resultado"></div>
-                    <div id="arbol-visualizador" class="arbol-visual">
-                        <div class="arbol-vacia-msg">El árbol está vacío. ¡Inserta un nodo!</div>
+                    <div id="lista-visualizador" class="lista-visual">
+                        <div class="lista-vacia-msg">La lista está vacía. ¡Inserta un nodo!</div>
                     </div>
                 </div>
+            </section>
+
+            <section id="sec-arbol" class="sim-section">
+                <header class="section-header"><h1>Árbol Binario</h1></header>
+                <div class="canvas-container"><div id="arbol-visualizador"></div></div>
             </section>
 
             <section id="sec-heap" class="sim-section">
@@ -155,8 +201,8 @@
     <script src="../js/cola.js"></script>
     <script src="../js/lista.js"></script>
     <script src="../js/arbol.js"></script>
-    <script src="../js/heap.js"></script>
+    <script src="heap.js"></script>
     
     <script src="../js/main.js"></script>
 </body>
-</html>
+</html> 
