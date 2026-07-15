@@ -1,0 +1,113 @@
+export const structureCatalog = [
+  {
+    id: "stack",
+    name: "Pila",
+    navLabel: "Pilas",
+    category: "Estructuras lineales",
+    icon: "layers",
+    shortDescription: "El último elemento en entrar es el primero en salir.",
+    description:
+      "Una pila organiza elementos bajo el principio LIFO. Solo se inserta y elimina desde el extremo llamado cima.",
+    principle: "LIFO",
+    principleLabel: "Last In, First Out",
+    insertAction: "Push",
+    deleteAction: "Pop",
+    placeholder: "Ingresa un número",
+    initialValues: [7, 13, 24, 31],
+    complexity: [
+      ["Insertar", "O(1)"],
+      ["Eliminar", "O(1)"],
+      ["Consultar cima", "O(1)"],
+    ],
+    steps: [
+      "El nuevo dato se coloca sobre la cima.",
+      "La referencia de la cima se actualiza.",
+      "Pop retira únicamente el elemento superior.",
+    ],
+  },
+  {
+    id: "queue",
+    name: "Cola",
+    navLabel: "Colas",
+    category: "Estructuras lineales",
+    icon: "listOrdered",
+    shortDescription: "El primer elemento en entrar es el primero en salir.",
+    description:
+      "Una cola mantiene el orden de llegada. Los elementos ingresan por el final y salen por el frente.",
+    principle: "FIFO",
+    principleLabel: "First In, First Out",
+    insertAction: "Enqueue",
+    deleteAction: "Dequeue",
+    placeholder: "Ingresa un número",
+    initialValues: [12, 18, 26, 39],
+    complexity: [
+      ["Insertar", "O(1)"],
+      ["Eliminar", "O(1)"],
+      ["Consultar frente", "O(1)"],
+    ],
+    steps: [
+      "El nuevo dato ingresa por el final.",
+      "El frente conserva el elemento más antiguo.",
+      "Dequeue retira el elemento del frente.",
+    ],
+  },
+  {
+    id: "list",
+    name: "Lista enlazada",
+    navLabel: "Listas",
+    category: "Estructuras lineales",
+    icon: "boxes",
+    shortDescription: "Nodos conectados mediante referencias al siguiente.",
+    description:
+      "Una lista enlazada está formada por nodos. Cada nodo guarda un dato y una referencia que permite llegar al siguiente.",
+    principle: "ENLACES",
+    principleLabel: "Dato + siguiente",
+    insertAction: "Insertar",
+    deleteAction: "Eliminar valor",
+    placeholder: "Valor del nodo",
+    initialValues: [8, 17, 23, 35],
+    complexity: [
+      ["Insertar al final", "O(1)*"],
+      ["Buscar", "O(n)"],
+      ["Eliminar por valor", "O(n)"],
+    ],
+    steps: [
+      "Se crea un nodo con el dato ingresado.",
+      "El último nodo apunta al nuevo nodo.",
+      "Al eliminar, se reconectan los nodos vecinos.",
+    ],
+    note: "* Manteniendo una referencia directa al último nodo.",
+  },
+  {
+    id: "tree",
+    name: "Árbol binario de búsqueda",
+    navLabel: "Árbol binario",
+    category: "Estructuras jerárquicas",
+    icon: "gitBranch",
+    shortDescription: "Organiza valores menores a la izquierda y mayores a la derecha.",
+    description:
+      "Un árbol binario de búsqueda distribuye los datos de forma jerárquica. Cada nodo puede tener como máximo dos hijos.",
+    principle: "BST",
+    principleLabel: "Izquierda < raíz < derecha",
+    insertAction: "Insertar",
+    deleteAction: "Eliminar valor",
+    placeholder: "Valor del nodo",
+    initialValues: [42, 24, 64, 12, 30, 56, 78],
+    complexity: [
+      ["Insertar", "O(log n)*"],
+      ["Buscar", "O(log n)*"],
+      ["Eliminar", "O(log n)*"],
+    ],
+    steps: [
+      "La búsqueda comienza en la raíz.",
+      "Un valor menor avanza a la izquierda; uno mayor, a la derecha.",
+      "La posición libre encontrada recibe el nuevo nodo.",
+    ],
+    note: "* En un árbol equilibrado. En el peor caso puede ser O(n).",
+  },
+];
+
+export const futureStructures = [
+  { name: "Grafos", icon: "network" },
+  { name: "Matrices y tensores", icon: "grid" },
+];
