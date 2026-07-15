@@ -777,3 +777,125 @@ recorridoBtns.forEach(btn => {
 });
 
 renderizarArbol();
+<<<<<<< Updated upstream
+=======
+
+// ==========================================================================
+// INSTANCIACIÓN DEL HEAP
+// ==========================================================================
+const miHeap = new MaxHeap();
+
+
+// ==========================================================================
+// CONTROLADOR VISUAL DEL HEAP (MAX-HEAP)
+// ==========================================================================
+
+const heapInput = document.getElementById('heap-input');
+const btnHeapInsertar = document.getElementById('btn-heap-insertar');
+const btnHeapExtraer = document.getElementById('btn-heap-extraer');
+const btnHeapPeek = document.getElementById('btn-heap-peek');
+const btnHeapClear = document.getElementById('btn-heap-clear');
+const heapVisualizador = document.getElementById('heap-visualizador');
+const heapStatusText = document.getElementById('heap-status');
+const heapPeekVal = document.getElementById('heap-peek-val');
+
+/**
+ * Renderiza el heap completo en el DOM como un árbol.
+ * Reutiliza la función crearNodoArbol() para dibujar cada nodo.
+ */
+function renderizarHeap() {
+    heapVisualizador.innerHTML = '';
+
+    if (miHeap.isEmpty()) {
+        heapVisualizador.innerHTML = '<div class="arbol-vacia-msg">El heap está vacío. ¡Inserta un elemento!</div>';
+        heapStatusText.textContent = 'Vacío';
+        heapStatusText.style.color = 'var(--color-danger)';
+        heapPeekVal.textContent = '-';
+        return;
+    }
+
+    heapStatusText.textContent = `${miHeap.size()} elementos`;
+    heapStatusText.style.color = 'var(--color-success)';
+    heapPeekVal.textContent = miHeap.peek();
+
+    const estructura = miHeap.getEstructura();
+    const nodoRaiz = crearNodoArbol(estructura, 0);
+    if (nodoRaiz) {
+        const raizCircle = nodoRaiz.querySelector('.nodo-arbol');
+        if (raizCircle) {
+            raizCircle.classList.add('nodo-heap-raiz');
+        }
+    }
+    heapVisualizador.appendChild(nodoRaiz);
+}
+
+// --- EVENTOS DEL HEAP ---
+
+/**
+ * Botón INSERTAR: Agrega un valor al Max-Heap.
+ */
+btnHeapInsertar.addEventListener('click', () => {
+    const valor = heapInput.value.trim();
+    if (valor === '') {
+        alert('Escribe un valor para insertar.');
+        return;
+    }
+
+    const num = Number(valor);
+    const dato = isNaN(num) ? valor : num;
+
+    miHeap.insertar(dato);
+
+    heapInput.value = '';
+    heapInput.focus();
+    renderizarHeap();
+});
+
+heapInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') btnHeapInsertar.click();
+});
+
+/**
+ * Botón EXTRAER MÁX: Elimina y devuelve la raíz del heap.
+ */
+btnHeapExtraer.addEventListener('click', () => {
+    if (miHeap.isEmpty()) {
+        alert('El heap está vacío. No hay nada que extraer.');
+        return;
+    }
+
+    const maximo = miHeap.extraerMaximo();
+    alert(`Se extrajo el valor máximo: "${maximo}"`);
+    renderizarHeap();
+});
+
+/**
+ * Botón PEEK: Muestra el valor máximo sin extraerlo.
+ */
+btnHeapPeek.addEventListener('click', () => {
+    if (miHeap.isEmpty()) {
+        alert('El heap está vacío.');
+        return;
+    }
+
+    const maximo = miHeap.peek();
+    alert(`El valor máximo actual es: "${maximo}"`);
+});
+
+/**
+ * Botón VACIAR: Elimina todos los elementos del heap.
+ */
+btnHeapClear.addEventListener('click', () => {
+    if (miHeap.isEmpty()) {
+        alert('El heap ya está vacío.');
+        return;
+    }
+
+    if (confirm('¿Estás seguro de que deseas vaciar todo el heap?')) {
+        miHeap.clear();
+        renderizarHeap();
+    }
+});
+
+renderizarHeap();
+>>>>>>> Stashed changes

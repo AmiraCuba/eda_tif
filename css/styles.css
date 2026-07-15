@@ -633,18 +633,19 @@ body {
     box-shadow: 0 8px 24px rgba(169, 132, 155, 0.35);
 }
 
-/* Etiqueta "Raíz" debajo del nodo raíz */
+/* Etiqueta "Raíz" dentro del nodo raíz (sutil, abajo) */
 .nodo-raiz::after {
     content: "Raíz";
     font-family: 'Inter', system-ui, sans-serif;
-    font-size: 0.6rem;
+    font-size: 0.4rem;
     position: absolute;
-    bottom: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--text-muted);
+    bottom: 3px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgba(62, 39, 35, 0.35);
     font-weight: 600;
-    white-space: nowrap;
+    line-height: 1;
 }
 
 /* Nodo durante la animación de búsqueda (borde malva con glow) */
@@ -677,8 +678,35 @@ body {
 .arbol-hijos {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 16px;
+    gap: 14px;
+    margin-top: 12px;
+    position: relative;
+}
+
+/* Tronco vertical desde el círculo padre hasta la barra horizontal */
+.arbol-hijos::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 12px;
+    background: #b8958a;
+    border-radius: 2px;
+}
+
+/* Barra horizontal que une los dos hijos */
+.arbol-hijos::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 66px;
+    height: 3px;
+    background: #b8958a;
+    border-radius: 2px;
 }
 
 /* Wrapper individual de cada hijo (izquierdo o derecho) */
@@ -688,13 +716,45 @@ body {
     align-items: center;
 }
 
-/* Línea conectora entre nodo padre e hijo */
+/* Rama vertical desde la barra hasta el hijo (solo nodos reales) */
 .arbol-hijo::before {
     content: "";
+    display: none;
+    width: 3px;
+    height: 14px;
+    background: #b8958a;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.arbol-hijo:has(.arbol-nodo-wrapper)::before {
     display: block;
-    width: 2px;
-    height: 16px;
-    background: #c9a0a5;
+}
+
+/* ==========================================================================
+   VISUALIZADOR DEL HEAP (MAX-HEAP)
+   ========================================================================== */
+
+/* Nodo raíz del heap: destacado con gradiente dorado/miel */
+.nodo-heap-raiz {
+    background: linear-gradient(145deg, #f5ebe0, #ebd0b0) !important;
+    border: 2px solid #c9a87c !important;
+    box-shadow: 0 8px 24px rgba(180, 140, 90, 0.35) !important;
+}
+
+/* Etiqueta "Raíz (Máx)" dentro del nodo raíz del heap (sutil, abajo) */
+.nodo-heap-raiz::after {
+    content: "Raíz (Máx)";
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.4rem;
+    position: absolute;
+    bottom: 3px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgba(141, 110, 59, 0.45);
+    font-weight: 600;
+    line-height: 1;
 }
 
 /* ==========================================================================
