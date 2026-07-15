@@ -7,10 +7,10 @@ import Pila, { pilaInfo } from "./Pila/Pila";
 import Tensor, { tensorInfo } from "./Tensor/Tensor";
 
 export const structureRegistry = [
-  { ...pilaInfo, enabled: false, component: Pila },
-  { ...colaInfo, enabled: false, component: Cola },
+  { ...pilaInfo, enabled: true, component: Pila },
+  { ...colaInfo, enabled: true, component: Cola },
   { ...listaInfo, enabled: true, component: Lista },
-  { ...arbolBinarioInfo, enabled: false, component: ArbolBinario },
+  { ...arbolBinarioInfo, enabled: true, component: ArbolBinario },
   { ...grafoInfo, enabled: true, component: Grafo },
   { ...matrizInfo, enabled: true, component: Matriz },
   { ...tensorInfo, enabled: true, component: Tensor },
