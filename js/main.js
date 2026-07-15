@@ -777,8 +777,6 @@ recorridoBtns.forEach(btn => {
 });
 
 renderizarArbol();
-<<<<<<< Updated upstream
-=======
 
 // ==========================================================================
 // INSTANCIACIÓN DEL HEAP
@@ -898,4 +896,3 @@ btnHeapClear.addEventListener('click', () => {
 });
 
 renderizarHeap();
->>>>>>> Stashed changes

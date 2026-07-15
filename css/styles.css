@@ -696,24 +696,12 @@ body {
     border-radius: 2px;
 }
 
-/* Barra horizontal que une los dos hijos */
-.arbol-hijos::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 66px;
-    height: 3px;
-    background: #b8958a;
-    border-radius: 2px;
-}
-
 /* Wrapper individual de cada hijo (izquierdo o derecho) */
 .arbol-hijo {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
 /* Rama vertical desde la barra hasta el hijo (solo nodos reales) */
@@ -729,6 +717,30 @@ body {
 
 .arbol-hijo:has(.arbol-nodo-wrapper)::before {
     display: block;
+}
+
+/* Segmento horizontal del hijo izquierdo hacia el centro (crece con el subárbol) */
+.arbol-hijo:first-child:has(.arbol-nodo-wrapper)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: calc(50% + 7px);
+    height: 3px;
+    background: #b8958a;
+    border-radius: 2px;
+}
+
+/* Segmento horizontal del hijo derecho hacia el centro (crece con el subárbol) */
+.arbol-hijo:last-child:has(.arbol-nodo-wrapper)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 50%;
+    width: calc(50% + 7px);
+    height: 3px;
+    background: #b8958a;
+    border-radius: 2px;
 }
 
 /* ==========================================================================
