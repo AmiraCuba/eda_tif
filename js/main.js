@@ -781,7 +781,7 @@ renderizarArbol();
 // ==========================================================================
 // INSTANCIACIÓN DEL HEAP
 // ==========================================================================
-const miHeap = new MaxHeap();
+const miHeap = new Heap("max");
 
 
 // ==========================================================================
@@ -796,6 +796,14 @@ const btnHeapClear = document.getElementById('btn-heap-clear');
 const heapVisualizador = document.getElementById('heap-visualizador');
 const heapStatusText = document.getElementById('heap-status');
 const heapPeekVal = document.getElementById('heap-peek-val');
+const heapTitulo = document.getElementById('heap-titulo');
+const heapDescripcion = document.getElementById('heap-descripcion');
+
+const heapPeekLabel = document.getElementById('heap-peek-label');
+
+const heapTipoRadios = document.querySelectorAll(
+    'input[name="heap-tipo"]'
+);
 
 /**
  * Renderiza el heap completo en el DOM como un árbol.
@@ -803,6 +811,41 @@ const heapPeekVal = document.getElementById('heap-peek-val');
  */
 function renderizarHeap() {
     heapVisualizador.innerHTML = '';
+
+    if (miHeap.getTipo() === "max") {
+
+        heapTitulo.textContent =
+            "Simulador de Max-Heap (Montículo Máximo)";
+
+        heapDescripcion.textContent =
+            "Estructura de árbol completo. Cada nodo padre es mayor que sus hijos. La raíz contiene el valor máximo.";
+
+        heapPeekLabel.textContent =
+            "Máximo (Peek):";
+
+        btnHeapExtraer.textContent =
+            "Extraer Máx";
+
+        btnHeapPeek.textContent =
+            "Peek (Ver Máx)";
+
+    } else {
+
+        heapTitulo.textContent =
+            "Simulador de Min-Heap (Montículo Mínimo)";
+
+        heapDescripcion.textContent =
+            "Estructura de árbol completo. Cada nodo padre es menor que sus hijos. La raíz contiene el valor mínimo.";
+
+        heapPeekLabel.textContent =
+            "Mínimo (Peek):";
+
+        btnHeapExtraer.textContent =
+            "Extraer Mín";
+
+        btnHeapPeek.textContent =
+            "Peek (Ver Mín)";
+    }
 
     if (miHeap.isEmpty()) {
         heapVisualizador.innerHTML = '<div class="arbol-vacia-msg">El heap está vacío. ¡Inserta un elemento!</div>';
@@ -857,33 +900,48 @@ heapInput.addEventListener('keypress', (e) => {
  * Botón EXTRAER MÁX: Elimina y devuelve la raíz del heap.
  */
 btnHeapExtraer.addEventListener('click', () => {
+
     if (miHeap.isEmpty()) {
         alert('El heap está vacío. No hay nada que extraer.');
         return;
     }
 
-    const maximo = miHeap.extraerMaximo();
-    alert(`Se extrajo el valor máximo: "${maximo}"`);
-    renderizarHeap();
-});
+    const valor = miHeap.extraer();
 
+    const texto = miHeap.getTipo() === "max"
+        ? "máximo"
+        : "mínimo";
+
+    alert(`Se extrajo el valor ${texto}: "${valor}"`);
+
+    renderizarHeap();
+
+});
 /**
- * Botón PEEK: Muestra el valor máximo sin extraerlo.
+ * Botón PEEK: Muestra la raíz del Heap sin extraerla.
  */
 btnHeapPeek.addEventListener('click', () => {
+
     if (miHeap.isEmpty()) {
         alert('El heap está vacío.');
         return;
     }
 
-    const maximo = miHeap.peek();
-    alert(`El valor máximo actual es: "${maximo}"`);
+    const valor = miHeap.peek();
+
+    const texto = miHeap.getTipo() === "max"
+        ? "máximo"
+        : "mínimo";
+
+    alert(`El valor ${texto} actual es: "${valor}"`);
+
 });
 
 /**
- * Botón VACIAR: Elimina todos los elementos del heap.
+ * Botón VACIAR: Elimina todos los elementos del Heap.
  */
 btnHeapClear.addEventListener('click', () => {
+
     if (miHeap.isEmpty()) {
         alert('El heap ya está vacío.');
         return;
@@ -893,6 +951,21 @@ btnHeapClear.addEventListener('click', () => {
         miHeap.clear();
         renderizarHeap();
     }
+
 });
 
-renderizarHeap();
+/**
+ * Selector del tipo de Heap (Max / Min)
+ */
+heapTipoRadios.forEach(radio => {
+
+    radio.addEventListener('change', () => {
+
+        miHeap.cambiarTipo(radio.value);
+
+        renderizarHeap();
+
+    });
+
+});
+

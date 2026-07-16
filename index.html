@@ -164,25 +164,77 @@
 
             <section id="sec-heap" class="sim-section">
                 <header class="section-header">
-                    <h1>Simulador de Max-Heap (Montículo Máximo)</h1>
-                    <p>Estructura de árbol completo. Cada nodo padre es mayor que sus hijos. La raíz siempre contiene el valor máximo.</p>
+                    <h1 id="heap-titulo">
+                        Simulador de Max-Heap (Montículo Máximo)
+                    </h1>
+
+                    <p id="heap-descripcion">
+                        Estructura de árbol completo. Cada nodo padre es mayor que sus hijos. La raíz siempre contiene el valor máximo.
+                    </p>
                 </header>
 
+                <div class="heap-selector">
+                    <input
+                        type="radio"
+                        id="heap-max"
+                        name="heap-tipo"
+                        value="max"
+                        checked
+                    >
+                    <label for="heap-max">
+                        Max Heap
+                    </label>
+
+
+                    <input
+                        type="radio"
+                        id="heap-min"
+                        name="heap-tipo"
+                        value="min"
+                    >
+                    <label for="heap-min">
+                        Min Heap
+                    </label>
+
+                </div>
+
+
                 <div class="control-panel">
+                    
                     <div class="input-group">
                         <input type="text" id="heap-input" placeholder="Valor (ej. 42 o 'A')">
                         <button id="btn-heap-insertar" class="btn btn-primary">Insertar</button>
                     </div>
                     <div class="action-group">
-                        <button id="btn-heap-extraer" class="btn btn-danger">Extraer Máx</button>
-                        <button id="btn-heap-peek" class="btn btn-info">Peek (Ver Máx)</button>
+                        <button
+                            id="btn-heap-extraer"
+                            class="btn btn-danger">
+                            Extraer Máx
+                        </button>
+
+                        <button
+                            id="btn-heap-peek"
+                            class="btn btn-info">
+                            Peek (Ver Máx)
+                        </button>
                         <button id="btn-heap-clear" class="btn btn-warning">Vaciar</button>
                     </div>
                 </div>
 
                 <div class="status-bar">
-                    <span><strong>Estado:</strong> <span id="heap-status" class="status-text">Vacío</span></span>
-                    <span><strong>Máximo (Peek):</strong> <span id="heap-peek-val">-</span></span>
+                    <span>
+                        <strong>Estado:</strong>
+                        <span id="heap-status" class="status-text">
+                            Vacío
+                        </span>
+                    </span>
+
+                    <span>
+                        <strong id="heap-peek-label">
+                            Máximo (Peek):
+                        </strong>
+                        <span id="heap-peek-val">-</span>
+                    </span>
                 </div>
 
                 <div class="canvas-container">
